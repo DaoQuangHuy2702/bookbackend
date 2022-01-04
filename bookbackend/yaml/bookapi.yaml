@@ -1,0 +1,301 @@
+openapi: 3.0.1
+info:
+  title: Book REST APIs
+  description: The document of Book REST APIs
+  contact:
+    name: Quang Huy
+    email: quanghuy2702@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://localhost:8080/book/backend/v1
+  - url: http://localhost:8080/book/backend/v1
+
+paths:
+  /books:
+    get:
+      tags:
+        - Books
+      summary: getAllBooks
+      operationId: getAllBooks
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+      responses:
+        200:
+          $ref: '#/components/responses/Books'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+      security:
+        - ApiKeyAuth: []
+    post:
+      tags:
+        - Books
+      summary: addBook
+      operationId: addBook
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/Book'
+        201:
+          $ref: '#/components/responses/Created'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+      security:
+        - ApiKeyAuth: []
+      x-codegen-request-body-name: request
+  /books/{BookId}:
+    get:
+      tags:
+        - Books
+      summary: getBook
+      operationId: getBook
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        200:
+          $ref: '#/components/responses/Book'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+      security:
+        - ApiKeyAuth: []
+    put:
+      tags:
+        - Books
+      summary: updateBook
+      operationId: updateBook
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+        - $ref: '#/components/parameters/BookId'
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/Book'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+      security:
+        - ApiKeyAuth: []
+      x-codegen-request-body-name: request
+    delete:
+      tags:
+        - Books
+      summary: deleteBook
+      operationId: deleteBook
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        200:
+          description: '200: OK'
+          content: {}
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+      security:
+        - ApiKeyAuth: []
+  /books/category/{BookCategory}:
+    get:
+      tags:
+        - Books
+      summary: getBookByCategory
+      operationId: getBookByCategory
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+        - $ref: '#/components/parameters/BookCategory'
+      responses:
+        200:
+          $ref: '#/components/responses/Books'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+      security:
+        - ApiKeyAuth: []
+  /books/search:
+    get:
+      tags:
+        - Books
+      summary: searchBook
+      operationId: searchBook
+      parameters:
+        - $ref: '#/components/parameters/Request-Context'
+        - $ref: '#/components/parameters/Keyword-Search'
+      responses:
+        200:
+          $ref: '#/components/responses/Books'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/NoAuthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 030e5438-4d9e-4d41-aa68-ac04b05b7c3d
+        name:
+          type: string
+          example: Demo
+        image:
+          type: string
+          example: adjjwjgojaslkajhfkot5jocsop
+        author:
+          type: string
+          example: Demo
+        category:
+          type: string
+          example: HTML
+        content:
+          type: string
+          example: afjqhfichaioajhfjk
+    Books:
+      type: array
+      items:
+        $ref: '#/components/schemas/Book'
+    BookRequest:
+      required:
+        - name
+        - category
+      title: BookRequest
+      type: object
+      properties:
+        name:
+          type: string
+          example: Demo
+        image:
+          type: string
+          example: adjjwjgojaslkajhfkot5jocsop
+        author:
+          type: string
+          example: Demo
+        category:
+          type: string
+          example: HTML
+        content:
+          type: string
+          example: afjqhfichaioajhfjk
+  responses:
+    Book:
+      description: Book Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Book'
+    Books:
+      description: Books Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Books'
+    OK:
+      description: '200: OK'
+      content: {}
+    Created:
+      description: '201: Created'
+      content: {}
+    Accepted:
+      description: '202: Accepted'
+      content: {}
+    BadRequest:
+      description: '400: Bad Request'
+      content: {}
+    NoAuthorized:
+      description: '401: No Authorized'
+      content: {}
+    Forbidden:
+      description: '403: Forbidden'
+      content: {}
+    NotFound:
+      description: '404: Not Found'
+      content: {}
+    InternalServerError:
+      description: '500: Internal Server Error'
+      content: {}
+  parameters:
+    Request-Context:
+      name: apikey
+      in: header
+      description: Request Context
+      required: true
+      schema:
+        type: string
+    BookId:
+      name: BookId
+      in: path
+      required: true
+      schema:
+        type: string
+    BookCategory:
+      name: BookCategory
+      in: path
+      required: true
+      schema:
+        type: string
+    Keyword-Search:
+      name: term
+      in: query
+      description: Keyword Search
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: Atuthentication Key
+      name: X-API-Key
+      in: header
